@@ -1,0 +1,10 @@
+.alert {
+	text-align: center;
+	padding: 10px; 
+	background: #652487; 
+	color: #fff;
+	margin-bottom: 10px;
+	transition: all 0.7s;
+	display: none; 
+}
+

@@ -1,0 +1,81 @@
+//Initialize Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyC0PHO2aRCVYYH28mEk7VZE6RzOXeOWDs4",
+    authDomain: "contact-form-87.firebaseapp.com",
+    databaseURL: "https://contact-form-87.firebaseio.com",
+    projectId: "contact-form-87",
+    storageBucket: "contact-form-87.appspot.com",
+    messagingSenderId: "739286873296",
+    appId: "1:739286873296:web:2f414ca64b633b943d5ad5",
+    measurementId: "G-S6NYZ8N7Q9"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+
+//Reference messages collection 
+
+var messagesRef = firebase.database().ref('messages');
+
+
+
+document.getElementById('contact-form').addEventListener('submit', submitForm); 
+
+//submit form
+function submitForm(e) {
+	e.preventDefault(); 
+
+	//Get Values
+
+	var name = getInputValue('name'); 
+	var email = getInputValue('email'); 
+	var message = getInputValue('message');
+
+	const ref = firebase.storage().ref()
+
+	const file = document.querySelector("#fileUpload").files[0]; 
+
+	const fileName = file.name; 
+
+	const metadata = {
+		contentType:file.type 
+	}
+	const task = ref.child(fileName).put(file, metadata)
+	task
+	.then(snapshot => snapshot.ref.getDownloadURL())
+	.then(url => {
+		console.log(url); 
+		alert("Image Upload Successful");
+	}); 
+
+	saveMessage(name, email, message); 
+
+	//Message received notification
+	document.querySelector('.alert').style.display = 'block'; 
+
+	//Hide Alert after 2 sec
+	setTimeout(function() {
+		document.querySelector('.alert').style.display = 'none';  
+	}, 2000);
+
+	//clear form 
+	document.getElementById('contact-form').reset(); 
+}
+
+//Function to get form values 
+
+function getInputValue(id) {
+	return document.getElementById(id).value; 
+}
+
+// save messages to firebase
+
+function saveMessage(name, email, message) {
+	var newMessageRef = messagesRef.push(); 
+	newMessageRef.set({
+		name: name, 
+		email: email, 
+		message: message 
+	}); 
+}
