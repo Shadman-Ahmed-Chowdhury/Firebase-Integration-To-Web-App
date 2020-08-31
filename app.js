@@ -30,7 +30,20 @@ function submitForm(e) {
     var message = getInputValue("message");
 
     const ref = firebase.storage().ref();
+    const refUrl = firebase
+        .storage()
+        .refFromURL(
+            "https://firebasestorage.googleapis.com/v0/b/contact-form-87.appspot.com/o/Real%20Madrid%20Wallpaper.jpg?alt=media&token=3c76f929-8b8a-4408-b270-7780d24bed61"
+        );
 
+    refUrl
+        .delete()
+        .then(function () {
+            console.log("File deleted!");
+        })
+        .catch(function (error) {
+            console.log("Error: " + error);
+        });
     const file = document.querySelector("#fileUpload").files[0];
 
     const fileName = file.name;
